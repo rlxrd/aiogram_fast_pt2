@@ -1,8 +1,6 @@
 from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery
-from aiogram.filters import CommandStart, Command
-from aiogram.fsm.state import State, StatesGroup
-from aiogram.fsm.context import FSMContext
+from aiogram.filters import CommandStart
 
 import app.keyboards as kb
 import app.database.requests as rq
@@ -27,9 +25,9 @@ async def category(callback: CallbackQuery):
     await callback.message.answer('Выберите товар по категории',
                                   reply_markup=await kb.items(callback.data.split('_')[1]))
 
+
 @router.callback_query(F.data.startswith('item_'))
 async def category(callback: CallbackQuery):
     item_data = await rq.get_item(callback.data.split('_')[1])
     await callback.answer('Вы выбрали товар')
-    await callback.message.answer(f'Название: {item_data.name}\nОписание: {item_data.description}\nЦена: {item_data.price}$',
-                                  reply_markup=await kb.items(callback.data.split('_')[1]))
+    await callback.message.answer(f'Название: {item_data.name}\nОписание: {item_data.description}\nЦена: {item_data.price}$')
